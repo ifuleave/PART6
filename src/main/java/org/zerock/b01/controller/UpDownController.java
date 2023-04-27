@@ -47,6 +47,7 @@ public class UpDownController {
                     }
                 }catch (IOException e){
                     e.printStackTrace();
+
                 }
             });//end each
         }//end if
