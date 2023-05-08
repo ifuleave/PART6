@@ -15,4 +15,6 @@ public interface BoardSearch {
                                                       String keyword,
                                                       Pageable pageable);
 
+    //목록 데이터 처리
+    Page<BoardListReplyCountDTO> searchWithAll(String[] types, String keyword, Pageable pageable);
 }
