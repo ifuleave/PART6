@@ -13,6 +13,7 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.domain.BoardImage;
+import org.zerock.b01.dto.BoardListAllDTO;
 import org.zerock.b01.dto.BoardListReplyCountDTO;
 
 import java.util.List;
@@ -243,7 +244,14 @@ public class BoardRepositoryTests {
     public void testSearchImageReplyCount(){
 
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
-        boardRepository.searchWithAll(null, null, pageable);
+//        boardRepository.searchWithAll(null, null, pageable);
+
+        Page<BoardListAllDTO> result = boardRepository.searchWithAll(null, null, pageable);
+        log.info("------------------------------");
+        log.info(result.getTotalElements());
+
+        result.getContent().forEach(boardListAllDTO -> log.info(boardListAllDTO));
     }
+
 
 }
