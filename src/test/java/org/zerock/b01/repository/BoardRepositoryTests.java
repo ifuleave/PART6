@@ -13,9 +13,11 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b01.domain.Board;
 import org.zerock.b01.domain.BoardImage;
+import org.zerock.b01.dto.BoardDTO;
 import org.zerock.b01.dto.BoardListAllDTO;
 import org.zerock.b01.dto.BoardListReplyCountDTO;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -252,6 +254,7 @@ public class BoardRepositoryTests {
 
         result.getContent().forEach(boardListAllDTO -> log.info(boardListAllDTO));
     }
+
 
 
 }

@@ -44,6 +44,5 @@ public interface BoardService {
             boardDTO.setFileNames(fileNames);
             return boardDTO;
         }
-
 }
 

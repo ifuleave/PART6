@@ -35,19 +35,6 @@ public class BoardServiceTests {
         log.info("bno: " + bno);
     }
 
-    @Test
-    public void testModify() {
-
-        //변경에 필요한 데이터만
-        BoardDTO boardDTO = BoardDTO.builder()
-                .bno(101L)
-                .title("Updated....101")
-                .content("Updated content 101...")
-                .build();
-
-        boardService.modify(boardDTO);
-
-    }
 
     @Test
     public void testList() {
@@ -95,4 +82,16 @@ public class BoardServiceTests {
 
         }
     }
+
+    @Test
+    public void testModify(){
+        // 변경에 필요한 데이터
+        BoardDTO boardDTO = BoardDTO.builder().bno(101L).title("update...101").content("update content 101...")
+                .build();
+
+        //첨부파일을 하나 추가
+        boardDTO.setFileNames(Arrays.asList(UUID.randomUUID() + "_zzz.jpg"));
+        boardService.modify(boardDTO);
+    }
+
 }
