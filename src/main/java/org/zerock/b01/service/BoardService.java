@@ -24,11 +24,19 @@ public interface BoardService {
     // 게시글의 이미지와 댓글의 숫자까지 처리
     PageResponseDTO<BoardListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
 
-    default Board dtoToEntity(BoardDTO boardDTO){ // 게시물 등록
-        Board board = Board.builder().bno(boardDTO.getBno()).title(boardDTO.getTitle()).content(boardDTO.getContent()).writer(boardDTO.getWriter()).build();
+    // 이미지 등록
+    default Board dtoToEntity(BoardDTO boardDTO){
 
-        if (boardDTO.getFileNames() != null){
-            boardDTO.getFileNames().forEach(fileName ->{
+        Board board = Board.builder()
+                .bno(boardDTO.getBno())
+                .title(boardDTO.getTitle())
+                .content(boardDTO.getContent())
+                .writer(boardDTO.getWriter())
+
+                .build();
+
+        if(boardDTO.getFileNames() != null){
+            boardDTO.getFileNames().forEach(fileName -> {
                 String[] arr = fileName.split("_");
                 board.addImage(arr[0], arr[1]);
             });
@@ -37,12 +45,24 @@ public interface BoardService {
     }
     
 // 게시물 조회
-    default BoardDTO entityToDTO(Board board){
-            BoardDTO boardDTO = BoardDTO.builder().bno(board.getBno()).title(board.getTitle()).content(board.getContent()).writer(board.getWriter()).build();
-            List<String> fileNames = board.getImageSet().stream().sorted().map(boardImage -> boardImage.getUuid() + "_" + boardImage.getFileName()).collect(Collectors.toList());
+default BoardDTO entityToDTO(Board board) {
 
-            boardDTO.setFileNames(fileNames);
-            return boardDTO;
-        }
+    BoardDTO boardDTO = BoardDTO.builder()
+            .bno(board.getBno())
+            .title(board.getTitle())
+            .content(board.getContent())
+            .writer(board.getWriter())
+            .regDate(board.getRegDate())
+            .modDate(board.getModDate())
+            .build();
+
+    List<String> fileNames =
+            board.getImageSet().stream().sorted().map(boardImage ->
+                    boardImage.getUuid()+"_"+boardImage.getFileName()).collect(Collectors.toList());
+
+    boardDTO.setFileNames(fileNames);
+
+    return boardDTO;
+}
 }
 
