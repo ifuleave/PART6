@@ -139,5 +139,4 @@ public PageResponseDTO<BoardDTO> list(PageRequestDTO pageRequestDTO) {
                 .total((int)result.getTotalElements())
                 .build();
     }
-
 }

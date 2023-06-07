@@ -25,10 +25,9 @@ import java.util.*;
 @Log4j2
 public class UpDownController {
 
-//    @Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Value
-@Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Value
-    private String uploadPath;
 
+    @Value("${org.zerock.upload.path}")// import 시에 springframework으로 시작하는 Value
+    private String uploadPath;
 
     @ApiOperation(value = "Upload POST", notes = "POST 방식으로 파일 등록")
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -82,45 +81,50 @@ public class UpDownController {
         return null;
     }
 
+
     @ApiOperation(value = "view 파일", notes = "GET방식으로 첨부파일 조회")
     @GetMapping("/view/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
-        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
+
+        Resource resource = new FileSystemResource(uploadPath+File.separator + fileName);
         String resourceName = resource.getFilename();
         HttpHeaders headers = new HttpHeaders();
 
-        try {
-            headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
-        }catch (Exception e){
+        try{
+            headers.add("Content-Type", Files.probeContentType( resource.getFile().toPath() ));
+        } catch(Exception e){
             return ResponseEntity.internalServerError().build();
         }
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    @ApiOperation(value = "remove 파일", notes = "DELETE방식으로 파일 삭제")
-    @DeleteMapping("/view/{fileName}")
+    // 삭제
+    @ApiOperation(value = "remove 파일", notes = "DELETE 방식으로 파일 삭제")
+    @DeleteMapping("/remove/{fileName}")
     public Map<String,Boolean> removeFile(@PathVariable String fileName){
-        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
 
+        Resource resource = new FileSystemResource(uploadPath+File.separator + fileName);
         String resourceName = resource.getFilename();
 
         Map<String, Boolean> resultMap = new HashMap<>();
-
         boolean removed = false;
 
         try {
             String contentType = Files.probeContentType(resource.getFile().toPath());
             removed = resource.getFile().delete();
-            //섬네일이 존재 한다면
-             if(contentType.startsWith("image")){
-                 File thumbnailFile = new File(uploadPath + File.separator + "s_" + fileName);
-                 thumbnailFile.delete();
-             }
-        }catch (Exception e){
-            log.error(e.getMessage());
 
+            //섬네일이 존재한다면
+            if(contentType.startsWith("image")){
+                File thumbnailFile = new File(uploadPath+File.separator +"s_" + fileName);
+                thumbnailFile.delete();
+            }
+
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
+
         resultMap.put("result", removed);
+
         return resultMap;
     }
 }

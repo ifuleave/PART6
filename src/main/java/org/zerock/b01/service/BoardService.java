@@ -25,6 +25,7 @@ public interface BoardService {
     PageResponseDTO<BoardListAllDTO> listWithAll(PageRequestDTO pageRequestDTO);
 
     // 이미지 등록
+
     default Board dtoToEntity(BoardDTO boardDTO){
 
         Board board = Board.builder()
@@ -64,5 +65,6 @@ default BoardDTO entityToDTO(Board board) {
 
     return boardDTO;
 }
+
 }
 
