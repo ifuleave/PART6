@@ -132,25 +132,30 @@
     const link = [[${pageRequestDTO.getLink()}]]
     const formObj = document.querySelector("#f1")
 
-    document.querySelector(".modBtn").addEventListener("click", function(e){
-        e.preventDefault()
-        e.stopPropagation()
-
-        formObj.action = `/board/modify?${link}`
-        formObj.method ='post'
-        formObj.submit()
-
-
-    }, false)
+    // document.querySelector(".modBtn").addEventListener("click", function(e){
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    //
+    //     formObj.action = `/board/modify?${link}`
+    //     formObj.method ='post'
+    //     formObj.submit()
+    //
+    //
+    // }, false)
 
 
     document.querySelector(".removeBtn").addEventListener("click", function(e){
         e.preventDefault()
         e.stopPropagation()
 
+        // 화면에 보이는 파일들을 form 태그에 추가
+        appendFileData()
+        // g화면에서 안보이도록 처리된 파일들을 form 태그에 추가
+        appendNotShownData()
+
         formObj.action = `/board/remove`
         formObj.method ='post'
-        formObj.submit()
+        // formObj.submit() //테스트 이후에 주석해제
     }, false)
 
     document.querySelector(".listBtn").addEventListener("click", function(e){
@@ -274,6 +279,22 @@
         removeFileList.forEach(({uuid,fileName}) => {
             removeFileToServer({uuid,fileName})
         })
+    }
+
+    function appendNotShownData(){
+        if (removeFileList.length == 0) {
+            return
+        }
+
+        const target = document.querySelector(".uploadHidden")
+        let str = ''
+
+        for (let i = 0; i < removeFileList.length; i++) {
+            const {uuid, fileName} = removeFileList[i];
+
+            str += `<input type='hidden' name='fileNames' value="{uuid}+${fileName}">`
+        }
+        target.innerHTML += str;
     }
 </script>
 
